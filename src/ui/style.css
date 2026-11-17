@@ -1,0 +1,14 @@
+/* Негізгі стильдер. TODO (Шұғыла): дизайнды өзіңше жасаңыз. */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #f4f7fb; color: #1b2433; }
+.warning { background: #fff3cd; border-bottom: 1px solid #e8d48a; padding: 10px 16px; font-size: 14px; }
+header { padding: 16px; }
+header h1 { margin: 0 0 4px; font-size: 24px; }
+header p { margin: 0; color: #55627a; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; padding: 0 16px 24px; }
+.map-panel canvas { width: 100%; height: auto; background: #fff; border: 1px solid #d5dce8; border-radius: 8px; }
+.controls { background: #fff; border: 1px solid #d5dce8; border-radius: 8px; padding: 16px; }
+.controls h2 { margin-top: 0; font-size: 18px; }
+.todo { color: #8a94a6; font-style: italic; }
+.error { background: #fde2e2; color: #8a1c1c; padding: 10px; border-radius: 6px; }
+@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }

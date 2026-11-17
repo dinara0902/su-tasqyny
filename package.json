@@ -1,0 +1,13 @@
+{
+  "name": "su-tasqyny",
+  "version": "0.1.0",
+  "description": "Су тасқыны: эвакуация көмекшісі — A*, CSP және Байес ережесіне негізделген оқу прототипі",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "start": "npx serve .",
+    "benchmark": "node benchmark.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
