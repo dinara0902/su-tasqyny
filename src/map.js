@@ -24,16 +24,29 @@
 
   /** Ұяшық арқылы өтуге бола ма (тек карта бойынша, Байессіз). */
   function isPassable(map, x, y) {
-    // TODO: BLOCKED жиынын қолдану
-    throw new Error('TODO: isPassable');
-  }
+    const cell = cellAt(map, x, y);
+  return !BLOCKED.has(cell);
+    }
 
   /** Өтуге болатын 4 көрші: [{x, y}, ...]. */
   function neighbors(map, x, y) {
-    // TODO: жоғары, төмен, солға, оңға
-    throw new Error('TODO: neighbors');
+    const directions = [
+      { dx: 0, dy: -1 },  // жоғары
+      { dx: 0, dy: 1 },   // төмен
+      { dx: -1, dy: 0 },  // солға
+      { dx: 1, dy: 0 },   // оңға
+    ];
+    const result = [];
+    for (const d of directions) {
+      const nx = x + d.dx;
+      const ny = y + d.dy;
+      if (nx < 0 || nx >= map.width || ny < 0 || ny >= map.height) continue;
+      if (isPassable(map, nx, ny)) {
+        result.push({ x: nx, y: ny });
+      }
+    }
+    return result;
   }
-
   /** Координат кілті: Map құрылымдарында қолдануға ыңғайлы. */
   function key(x, y) {
     return x + ',' + y;
