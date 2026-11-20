@@ -24,14 +24,38 @@
     return floodProbAt(options, x, y) > options.threshold;
   }
 
-  /** Манхэттен қашықтығы. Бірнеше мақсат болса — ең кішісі. */
+  /**
+   * Эвристика h: Манхэттен қашықтығы (дәрісте: manhattan(a, b)).
+   * Бізде бірнеше пункт бар, сондықтан ең жақын пунктке дейінгі қашықтықты аламыз.
+   */
   function heuristic(cell, goals) {
-    // TODO
-    throw new Error('TODO: heuristic');
+    let best = Infinity;
+    for (const g of goals) {
+      const d = Math.abs(cell.x - g.x) + Math.abs(cell.y - g.y);
+      if (d < best) best = d;
+    }
+    return best;
+  }
+
+  /** Бір қадамның құны: 1 + penalty · P(F). Су басу қаупі жоғары ұяшық «қымбат». */
+  function stepCost(options, x, y) {
+    return 1 + options.penalty * floodProbAt(options, x, y);
+  }
+
+  /** cameFrom бойынша жолды кері қалпына келтіру: мақсаттан бастауға дейін, сосын аударамыз. */
+  function buildPath(cameFrom, goalCell) {
+    const path = [];
+    let cur = goalCell;
+    while (cur) {
+      path.push(cur);
+      cur = cameFrom.get(MapUtil.key(cur.x, cur.y));
+    }
+    return path.reverse();
   }
 
   /**
-   * A* іздеу.
+   * A* іздеу. Негізі — дәрістегі «A* Search – Grid Pathfinding Example» (Python), біздің картаға бейімделген.
+   * Толық түсіндірме: docs/TUSINDIRME.md → «A* коды жол-жолымен».
    * @param map
    * @param {{x:number,y:number}} start
    * @param {Array<{x:number,y:number}>} goals
@@ -40,10 +64,57 @@
    */
   function aStar(map, start, goals, options = {}) {
     const opt = { ...DEFAULTS, ...options };
-    // TODO: open тізімі (f ең кішісін алу), g мәндері, cameFrom
-    // TODO: қадам құны = 1 + penalty * P(F); P(F) > threshold → жабық
-    // TODO: order тізіміне зерттелген ұяшықтарды жазу
-    throw new Error('TODO: aStar');
+    // Кірісті тексеру: старт картада болуы керек, кемінде бір пункт керек
+    MapUtil.cellAt(map, start.x, start.y);
+    if (!Array.isArray(goals) || goals.length === 0) throw new Error('Кемінде бір эвакуация пункті керек');
+    const goalKeys = new Set(goals.map((g) => MapUtil.key(g.x, g.y)));
+    const startKey = MapUtil.key(start.x, start.y);
+
+    // Дәрісте: frontier = []; heapq.heappush(frontier, (manhattan(start, goal), 0, start))
+    // JavaScript-те heapq жоқ, сондықтан қарапайым тізім қолданамыз, f ең кішісін өзіміз іздейміз
+    const frontier = [{ f: heuristic(start, goals), g: 0, cell: start }];
+    // Дәрісте: came_from = {start: None}; cost_so_far = {start: 0}
+    const cameFrom = new Map([[startKey, null]]);
+    const costSoFar = new Map([[startKey, 0]]);
+    const order = [];
+
+    // Дәрісте: while frontier:
+    while (frontier.length > 0) {
+      // Дәрісте: f, g, current = heapq.heappop(frontier) — f ең кіші элементті аламыз
+      let best = 0;
+      for (let i = 1; i < frontier.length; i++) {
+        if (frontier[i].f < frontier[best].f) best = i;
+      }
+      const { g, cell: current } = frontier.splice(best, 1)[0];
+      const currentKey = MapUtil.key(current.x, current.y);
+
+      // Ескірген жазба: бұл ұяшыққа кейін арзанырақ жол табылған — өткізіп жібереміз (дәрісте жоқ)
+      if (g > costSoFar.get(currentKey)) continue;
+      order.push(current);
+
+      // Дәрісте: if current == goal: break — бізде 3 пункт, кез келгені жарайды
+      if (goalKeys.has(currentKey)) {
+        return { found: true, path: buildPath(cameFrom, current), cost: g, goal: current, expanded: order.length, order };
+      }
+
+      // Дәрісте: for neighbor in get_neighbors(current, grid) — көршілерді map.js-тегі neighbors береді
+      for (const next of MapUtil.neighbors(map, current.x, current.y)) {
+        if (isClosed(opt, next.x, next.y)) continue; // су басқан (P > threshold) — өтуге болмайды
+        const nextKey = MapUtil.key(next.x, next.y);
+        // Дәрісте: new_cost = g + 1 — бізде қадам құны су қаупіне байланысты
+        const newCost = g + stepCost(opt, next.x, next.y);
+        // Дәрісте: if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]
+        if (!costSoFar.has(nextKey) || newCost < costSoFar.get(nextKey)) {
+          costSoFar.set(nextKey, newCost);
+          // Дәрісте: f = new_cost + manhattan(neighbor, goal); heapq.heappush(...)
+          frontier.push({ f: newCost + heuristic(next, goals), g: newCost, cell: next });
+          cameFrom.set(nextKey, current); // дәрісте: came_from[neighbor] = current
+        }
+      }
+    }
+
+    // Кезек бос қалды, пунктке жете алмадық
+    return { found: false, path: [], cost: Infinity, goal: null, expanded: order.length, order };
   }
 
   /**
