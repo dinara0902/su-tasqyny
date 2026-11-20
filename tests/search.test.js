@@ -31,7 +31,40 @@ test('A* BFS-тен аз немесе тең ұяшық зерттейді', () 
   }
 });
 
-test.todo('P > threshold ұяшық арқылы жол өтпейді');
-test.todo('мақсатқа жол жоқ → found: false, қате шықпайды');
-test.todo('бастапқы нүкте мақсаттың өзі → жол ұзындығы 1, құн 0');
-test.todo('картадан тыс координат → түсінікті қате');
+test('P > threshold ұяшық арқылы жол өтпейді', () => {
+  const start = { x: 0, y: 0 };
+  const goals = [{ x: 4, y: 0 }];
+  const floodProb = new Map([['2,0', 0.9]]);
+  const a = Search.aStar(emptyMap, start, goals, { floodProb });
+  assert.equal(a.found, true);
+  for (const cell of a.path) {
+    assert.ok(!(cell.x === 2 && cell.y === 0), 'жол су басқан ұяшықтан өтті');
+  }
+  assert.equal(a.cost, 6);
+});
+
+test('мақсатқа жол жоқ → found: false, қате шықпайды', () => {
+  const walledMap = {
+    width: 5,
+    height: 3,
+    grid: ['..#..', '..#..', '..#..'],
+  };
+  const a = Search.aStar(walledMap, { x: 0, y: 0 }, [{ x: 4, y: 0 }]);
+  const b = Search.bfs(walledMap, { x: 0, y: 0 }, [{ x: 4, y: 0 }]);
+  assert.equal(a.found, false);
+  assert.equal(b.found, false);
+  assert.equal(a.cost, Infinity);
+  assert.deepEqual(a.path, []);
+});
+
+test('бастапқы нүкте мақсаттың өзі → жол ұзындығы 1, құн 0', () => {
+  const a = Search.aStar(emptyMap, { x: 2, y: 2 }, [{ x: 2, y: 2 }]);
+  assert.equal(a.found, true);
+  assert.equal(a.path.length, 1);
+  assert.equal(a.cost, 0);
+});
+
+test('картадан тыс координат → түсінікті қате', () => {
+  assert.throws(() => Search.aStar(emptyMap, { x: 10, y: 0 }, [{ x: 4, y: 4 }]), /картадан тыс/);
+  assert.throws(() => Search.bfs(emptyMap, { x: -1, y: 0 }, [{ x: 4, y: 4 }]), /картадан тыс/);
+});
