@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const Search = require('../src/algorithms/search.js');
-// const village = require('../data/village.json');
+const village = require('../data/village.json');
 
 const emptyMap = {
   width: 5,
@@ -22,7 +22,15 @@ test('бос картада A* пен BFS жол ұзындығы бірдей',
   assert.equal(a.cost, 8);
 });
 
-test.todo('A* BFS-тен аз немесе тең ұяшық зерттейді');
+test('A* BFS-тен аз немесе тең ұяшық зерттейді', () => {
+  const goals = village.shelters.map((s) => ({ x: s.x, y: s.y }));
+  for (const family of village.families) {
+    const a = Search.aStar(village, family.house, goals);
+    const b = Search.bfs(village, family.house, goals);
+    assert.ok(a.expanded <= b.expanded, family.id);
+  }
+});
+
 test.todo('P > threshold ұяшық арқылы жол өтпейді');
 test.todo('мақсатқа жол жоқ → found: false, қате шықпайды');
 test.todo('бастапқы нүкте мақсаттың өзі → жол ұзындығы 1, құн 0');
