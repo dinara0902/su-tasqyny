@@ -4,12 +4,25 @@
  * Жауапты: Марат Нәрлі. Сипаттама: docs/SPEC.md, 4-бөлім.
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.Search = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
+  // map.js-ті қосамыз: Node.js-те require арқылы, браузерде window.MapUtil арқылы
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('../map.js'));
+  else root.Search = factory(root.MapUtil);
+})(typeof self !== 'undefined' ? self : this, function (MapUtil) {
   'use strict';
 
   const DEFAULTS = { penalty: 10, threshold: 0.7 };
+
+  /** Ұяшықтың су басу ықтималдығы P(F). Байес нәтижесі жоқ болса — 0. */
+  function floodProbAt(options, x, y) {
+    if (!options.floodProb) return 0;
+    const p = options.floodProb.get(MapUtil.key(x, y));
+    return p === undefined ? 0 : p;
+  }
+
+  /** P(F) > threshold болса, ұяшық жабық деп саналады. */
+  function isClosed(options, x, y) {
+    return floodProbAt(options, x, y) > options.threshold;
+  }
 
   /** Манхэттен қашықтығы. Бірнеше мақсат болса — ең кішісі. */
   function heuristic(cell, goals) {
