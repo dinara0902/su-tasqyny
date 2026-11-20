@@ -20,11 +20,11 @@
 ## Марат Нәрлі: A\*, BFS, архитектура
 
 - [ ] Тақырыпты оқытушыға жіберу (өтінім дайын)
-- [ ] GitHub-та репозиторий ашу, осы файлдарды жүктеу, екі қатысушыны Collaborator ретінде қосу (Settings → Collaborators)
-- [ ] `src/map.js`: картаны оқу, `cellAt`, `isPassable`, `neighbors`
-- [ ] `src/algorithms/search.js`: `aStar` (бірнеше мақсатпен, `floodProb`, `penalty`, `threshold`)
-- [ ] `src/algorithms/search.js`: `bfs`
-- [ ] `tests/search.test.js`: 6 тест
+- [x] GitHub-та репозиторий ашу, осы файлдарды жүктеу, екі қатысушыны Collaborator ретінде қосу (Settings → Collaborators)
+- [x] `src/map.js`: картаны оқу, `cellAt`, `isPassable`, `neighbors`
+- [x] `src/algorithms/search.js`: `aStar` (бірнеше мақсатпен, `floodProb`, `penalty`, `threshold`)
+- [x] `src/algorithms/search.js`: `bfs`
+- [x] `tests/search.test.js`: 6 тест
 - [ ] `benchmark.js`: A\* мен BFS салыстыруы
 - [ ] README: сілтемелер, метрикалар кестесі, AI қолдану бөлімі
 - [ ] `src/ui/app.js`: үйді басқанда A\* маршрутын салу, «Қалай ойлады?»: зерттелген ұяшықтар, A\* пен BFS салыстыруы
