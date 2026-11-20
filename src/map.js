@@ -16,8 +16,10 @@
    * Картадан тыс болса — Error.
    */
   function cellAt(map, x, y) {
-    // TODO: шекараны тексеру, map.grid[y][x] қайтару
-    throw new Error('TODO: cellAt');
+    if (x < 0 || x >= map.width || y < 0 || y>= map.height) {
+    throw new Error('Координат картадан тыс: ' + x + ', ' + y);
+    }
+    return map.grid[y][x];
   }
 
   /** Ұяшық арқылы өтуге бола ма (тек карта бойынша, Байессіз). */
