@@ -25,7 +25,7 @@
 - [x] `src/algorithms/search.js`: `aStar` (бірнеше мақсатпен, `floodProb`, `penalty`, `threshold`)
 - [x] `src/algorithms/search.js`: `bfs`
 - [x] `tests/search.test.js`: 6 тест
-- [ ] `benchmark.js`: A\* мен BFS салыстыруы
+- [x] `benchmark.js`: A\* мен BFS салыстыруы, су қаупінің әсері, CSP «тығыз» сценарийі
 - [ ] README: сілтемелер, метрикалар кестесі, AI қолдану бөлімі
 - [ ] `src/ui/app.js`: үйді басқанда A\* маршрутын салу, «Қалай ойлады?»: зерттелген ұяшықтар, A\* пен BFS салыстыруы
 - [ ] Vercel-ге жариялау
