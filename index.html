@@ -26,7 +26,14 @@
     <!-- TODO (Шұғыла): басқару панелі. Толық тізім: docs/SPEC.md, 6-бөлім -->
     <aside class="controls">
       <h2>Басқару</h2>
-      <p class="todo">Мұнда болады: хабарламалар, маршрут, «Барлығын бөлу», параметрлер, «Қалай ойлады?»</p>
+      <section class="panel">
+        <h3>Маршрут</h3>
+        <div id="route-panel"></div>
+      </section>
+      <section class="panel">
+        <div id="explain-panel"></div>
+      </section>
+      <p class="todo">Тағы болады: хабарламалар («Су басты» / «Құрғақ»), «Барлығын бөлу», параметрлер</p>
       <div id="error" class="error" hidden></div>
     </aside>
   </main>
@@ -35,6 +42,7 @@
   <script src="src/algorithms/bayes.js"></script>
   <script src="src/algorithms/search.js"></script>
   <script src="src/algorithms/csp.js"></script>
+  <script src="src/ui/route.js"></script>
   <script src="src/ui/app.js"></script>
 </body>
 </html>
