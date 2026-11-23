@@ -199,4 +199,3 @@ console.log(
   'Жіктеу шегі = 0.5; бұл жолды жабу шегі 0.7-ден бөлек.'
 );
 console.table(bayesRows);
-console.log('\n4. Байес: Жарқын Динара толтырады (docs/TASKS.md)\n');
